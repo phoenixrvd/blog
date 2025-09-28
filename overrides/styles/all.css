@@ -1,0 +1,29 @@
+.md-header {
+    background: #F06090;
+    background: linear-gradient(90deg, rgba(240, 96, 144, 1) 0%, rgba(126, 64, 181, 1) 24%, rgba(48, 63, 161, 1) 74%);
+}
+
+@media screen and (min-width: 76.25em) {
+    .md-nav #__nav_2_label,
+    .md-nav [aria-labelledby="__nav_2_label"] label,
+    .md-nav [aria-labelledby="__nav_2_label"] > .md-nav__list > li:nth-child(1),
+    .md-nav #__nav_2_2_label {
+        display: none;
+    }
+
+    .md-nav [aria-labelledby="__nav_2_label"] > .md-nav__list {
+        margin-left: -10px;
+    }
+}
+
+.md-tabs {
+    background: unset;
+    color: unset;
+}
+
+#refs .csl-entry {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    column-gap: .25em;
+    margin-bottom: .25em;
+}
