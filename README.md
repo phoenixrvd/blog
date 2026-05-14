@@ -1,6 +1,6 @@
 # Blog
 
-Dieses Projekt enthält den Quellcode für meinen persönlichen [Blog](https://vwolf.org).
+Dieses Projekt enthält den Quellcode für meinen persönlichen [Blog](https://vwolf.eu).
 Die Inhalte entstehen als Markdown-Dateien in [Obsidian](https://obsidian.md/) und werden anschließend
 mit [MkDocs](https://www.mkdocs.org/) und dem [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)-Theme
 zu einer statischen Website gerendert. Die Blog-Funktionalität wird von
