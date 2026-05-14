@@ -25,6 +25,7 @@ markdown_extensions:
 
 plugins:
   - search
+  - glightbox
   - minify:
       minify_html: true
       minify_js: true
@@ -44,6 +45,7 @@ plugins:
         - DevOps
         - Prozesse
         - CI/CD
+        - Blogging
   - mkdocs-simple-hooks:
       hooks:
         on_page_markdown: "hooks:insert_zotero_references"

@@ -1,62 +1,80 @@
 import re
 import subprocess
+from pathlib import Path
+
 from bs4 import BeautifulSoup
+
+RE_CITATION = re.compile(r"\[@([A-Za-z0-9:_-]+)]")
+
+
+def _refs_from_markdown(text, csl_path, bib_path, *, strict=False):
+    try:
+        html = subprocess.run(
+        [
+            "pandoc",
+            "--from",
+            "markdown",
+            "--to",
+            "html",
+            "--citeproc",
+            "--csl",
+            str(csl_path),
+            "--bibliography",
+            str(bib_path),
+        ],
+        input=text,
+        text=True,
+        capture_output=True,
+        check=True,
+    ).stdout
+    except subprocess.CalledProcessError:
+        if strict:
+            raise
+        return None
+
+    return BeautifulSoup(html, "html.parser").find(id="refs")
 
 
 def insert_zotero_references(markdown, page, config, files, **kwargs):
-    """
-    Replaces Zotero citation keys in Markdown text (e.g., [@Mueller2021])
-    with numbered IEEE-style reference links (e.g., [[1]](#ref-Mueller2021))
-    and appends the generated bibliography at the end of the page.
-
-    Requirements:
-        - The Markdown text contains at least one citation key [@...]
-        - The docs_dir contains the files references.bib and ieee.csl
-    """
-    RE_CITATION = r"\[@([A-Za-z0-9:_-]+)\]"
-
-    keys = re.findall(RE_CITATION, markdown)
+    """Replace Zotero keys with numbered refs and append bibliography HTML."""
+    keys = RE_CITATION.findall(markdown)
     if not keys:
         return markdown
 
-    docs_dir = config.get("docs_dir", ".")
-    bib_path = f"{docs_dir}/references.bib"
-    csl_path = f"{docs_dir}/ieee.csl"
+    unique_keys = list(dict.fromkeys(keys))
+    key_to_number = {key: i for i, key in enumerate(unique_keys, 1)}
+
+    docs_dir = Path(config.get("docs_dir", "."))
+    bib_path = docs_dir / "references.bib"
+    csl_path = docs_dir / "ieee.csl"
 
     try:
-        result = subprocess.run(
-            [
-                "pandoc",
-                "--from", "markdown",
-                "--to", "html",
-                "--citeproc",
-                "--csl", csl_path,
-                "--bibliography", bib_path,
-            ],
-            input=markdown,
-            text=True,
-            capture_output=True,
-            check=True,
-        )
+        refs_node = _refs_from_markdown(markdown, csl_path, bib_path, strict=True)
     except subprocess.CalledProcessError as e:
-        print(f"\n❌ Error while running Pandoc:")
-        print(f"  Command: {' '.join(e.cmd)}")
-        print(f"  Return code: {e.returncode}")
-
-        if e.stderr:
-            print(f"\n{markdown}\n\n🔍 Pandoc stderr output:\n{e.stderr.strip()}")
-
+        print(f"Pandoc failed ({e.returncode}): {e.stderr.strip()}")
         raise SystemExit(1)
 
-    refs_node = BeautifulSoup(result.stdout, "html.parser").find(id="refs")
-    refs_node['class'].append('footnote')
+    # Pandoc ignores citations inside code spans/fences; generate refs from synthetic citations.
+    if refs_node is None:
+        refs_node = _refs_from_markdown(
+            "\n".join(f"[@{key}]" for key in unique_keys),
+            csl_path,
+            bib_path,
+        )
 
-    unique_keys = list(dict.fromkeys(keys))  # Remove duplicates, preserve order
+    if refs_node is None:
+        # If refs cannot be generated at all, keep markdown untouched.
+        return markdown
+
+    classes = refs_node.get("class") or []
+    if isinstance(classes, str):
+        classes = classes.split()
+    if "footnote" not in classes:
+        classes.append("footnote")
+    refs_node["class"] = " ".join(classes)
 
     def replace_key(m):
         key = m.group(1)
-        num = unique_keys.index(key) + 1
-        return f"[[{num}]](#ref-{key})"
+        return f"[[{key_to_number[key]}]](#ref-{key})"
 
-    markdown = re.sub(RE_CITATION, replace_key, markdown)
-    return f"{markdown}<hr>{refs_node}"
+    return f"{RE_CITATION.sub(replace_key, markdown)}<hr>{refs_node}"
