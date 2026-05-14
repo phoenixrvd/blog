@@ -3,3 +3,5 @@
 public
 content/blog/posts/featured
 __pycache__
+.vscode
+content/references.bib
