@@ -4,3 +4,4 @@ mkdocs
 mkdocs-material
 mkdocs-minify-plugin
 mkdocs-simple-hooks
+mkdocs-glightbox
