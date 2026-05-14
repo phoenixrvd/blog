@@ -1,6 +1,6 @@
 site_name: v.Wolf
 site_url: "https://vwolf.eu"
-site_dir: public
+site_dir: dist
 docs_dir: content
 watch:
   - overrides

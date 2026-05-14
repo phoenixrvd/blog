@@ -35,10 +35,10 @@ mkdocs serve --livereload
 ## Build
 
 Erstelle die statischen Seiten. Sie werden anschließend committet, damit man sie bei GitHub Pages veröffentlichen kann.
-Die generierten Dateien werden im Verzeichnis `public` gespeichert:
+Die generierten Dateien werden im Verzeichnis `dist` gespeichert:
 
 ```bash
 source .venv/bin/activate
-rm -rf build/md/*
+rm -rf dist/*
 mkdocs build
 ```

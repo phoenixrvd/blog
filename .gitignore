@@ -1,6 +1,6 @@
 .idea
 .venv
-public
+dist
 content/blog/posts/featured
 __pycache__
 .vscode
