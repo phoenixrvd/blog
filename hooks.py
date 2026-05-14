@@ -5,13 +5,13 @@ from bs4 import BeautifulSoup
 
 def insert_zotero_references(markdown, page, config, files, **kwargs):
     """
-    Ersetzt Zotero-Zitationskeys im Markdown-Text (z. B. [@Müller2021])
-    durch durchnummerierte Referenzlinks im IEEE-Stil (z. B. [[1]](#ref-Müller2021))
-    und fügt am Ende der Seite die generierte Bibliographie ein.
+    Replaces Zotero citation keys in Markdown text (e.g., [@Mueller2021])
+    with numbered IEEE-style reference links (e.g., [[1]](#ref-Mueller2021))
+    and appends the generated bibliography at the end of the page.
 
-    Voraussetzungen:
-        - Der Markdown-Text enthält mindestens einen Zitationskey [@...]
-        - Im docs_dir liegen die Dateien references.bib und ieee.csl
+    Requirements:
+        - The Markdown text contains at least one citation key [@...]
+        - The docs_dir contains the files references.bib and ieee.csl
     """
     RE_CITATION = r"\[@([A-Za-z0-9:_-]+)\]"
 
@@ -23,25 +23,35 @@ def insert_zotero_references(markdown, page, config, files, **kwargs):
     bib_path = f"{docs_dir}/references.bib"
     csl_path = f"{docs_dir}/ieee.csl"
 
-    result = subprocess.run(
-        [
-            "pandoc",
-            "--from", "markdown",
-            "--to", "html",
-            "--citeproc",
-            "--csl", csl_path,
-            "--bibliography", bib_path,
-        ],
-        input=markdown,
-        text=True,
-        capture_output=True,
-        check=True,
-    )
+    try:
+        result = subprocess.run(
+            [
+                "pandoc",
+                "--from", "markdown",
+                "--to", "html",
+                "--citeproc",
+                "--csl", csl_path,
+                "--bibliography", bib_path,
+            ],
+            input=markdown,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"\n❌ Error while running Pandoc:")
+        print(f"  Command: {' '.join(e.cmd)}")
+        print(f"  Return code: {e.returncode}")
+
+        if e.stderr:
+            print(f"\n{markdown}\n\n🔍 Pandoc stderr output:\n{e.stderr.strip()}")
+
+        raise SystemExit(1)
 
     refs_node = BeautifulSoup(result.stdout, "html.parser").find(id="refs")
     refs_node['class'].append('footnote')
 
-    unique_keys = list(dict.fromkeys(keys))  # Duplikate entfernen, Reihenfolge behalten
+    unique_keys = list(dict.fromkeys(keys))  # Remove duplicates, preserve order
 
     def replace_key(m):
         key = m.group(1)
