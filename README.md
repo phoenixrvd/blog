@@ -42,3 +42,9 @@ source .venv/bin/activate
 rm -rf dist/*
 mkdocs build
 ```
+
+## License
+
+Code, build scripts, GitHub Actions, configuration files, and other technical parts of this repository are licensed under the MIT License. See [LICENSE](LICENSE).
+
+Blogposts, texts, images, graphics, and other editorial content are licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0). See [CONTENT_LICENSE.md](CONTENT_LICENSE.md).
