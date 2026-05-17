@@ -1,0 +1,10 @@
+# Ignore everything by default
+*
+
+# Allow Docker to reach the Dockerfile path; do not include other build files
+!build/
+!build/Dockerfile
+
+# Include the MkDocs output generated at the repo root
+!dist/
+!dist/**
