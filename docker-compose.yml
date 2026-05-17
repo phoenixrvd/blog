@@ -1,9 +1,0 @@
-services:
-  blog:
-    build:
-      context: .
-      dockerfile: build/Dockerfile
-    image: blog-static:latest
-    ports:
-      - "8080:8080"
-    restart: unless-stopped
