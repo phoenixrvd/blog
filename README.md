@@ -32,10 +32,8 @@ source .venv/bin/activate
 mkdocs serve --livereload
 ```
 
-## Build
-
-Erstelle die statischen Seiten. Sie werden anschließend committet, damit man sie bei GitHub Pages veröffentlichen kann.
-Die generierten Dateien werden im Verzeichnis `dist` gespeichert:
+Alternativ kann die Website lokal gebaut werden, um den statischen Output zu prüfen.
+Die generierten Dateien landen in `dist` und werden nicht committet:
 
 ```bash
 source .venv/bin/activate
