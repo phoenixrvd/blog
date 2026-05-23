@@ -46,6 +46,8 @@ plugins:
         - Prozesse
         - CI/CD
         - Blogging
+        - Software Qualität
+        - Legacy
   - mkdocs-simple-hooks:
       hooks:
         on_page_markdown: "hooks:insert_zotero_references"
