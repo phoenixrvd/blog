@@ -22,10 +22,19 @@ extra_css:
 markdown_extensions:
   - attr_list
   - pymdownx.blocks.caption
+  - pymdownx.superfences:
+      custom_fences:
+          - name: mermaid
+            class: mermaid
+            format: !!python/name:mermaid2.fence_mermaid_custom
+  - plantuml_markdown:
+      server: http://www.plantuml.com/plantuml
+      format: svg
 
 plugins:
   - search
   - glightbox
+  - mermaid2
   - minify:
       minify_html: true
       minify_js: true

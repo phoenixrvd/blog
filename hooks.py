@@ -35,6 +35,13 @@ def _refs_from_markdown(text, csl_path, bib_path, *, strict=False):
     return BeautifulSoup(html, "html.parser").find(id="refs")
 
 
+def _open_csl_entry_links_in_new_tab(refs_node):
+    for entry in refs_node.select(".csl-entry"):
+        for link in entry.find_all("a"):
+            link["target"] = "_blank"
+            link["rel"] = "noopener noreferrer"
+
+
 def insert_zotero_references(markdown, page, config, files, **kwargs):
     """Replace Zotero keys with numbered refs and append bibliography HTML."""
     keys = RE_CITATION.findall(markdown)
@@ -72,6 +79,7 @@ def insert_zotero_references(markdown, page, config, files, **kwargs):
     if "footnote" not in classes:
         classes.append("footnote")
     refs_node["class"] = " ".join(classes)
+    _open_csl_entry_links_in_new_tab(refs_node)
 
     def replace_key(m):
         key = m.group(1)

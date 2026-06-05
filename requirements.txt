@@ -5,3 +5,4 @@ mkdocs-material
 mkdocs-minify-plugin
 mkdocs-simple-hooks
 mkdocs-glightbox
+mkdocs-mermaid2-plugin

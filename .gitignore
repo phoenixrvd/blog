@@ -4,3 +4,4 @@ dist
 content/blog/posts/featured
 __pycache__
 .vscode
+*.bkp
