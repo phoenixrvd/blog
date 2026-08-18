@@ -49,11 +49,13 @@ plugins:
       draft_if_future_date: true
       categories_allowed:
         - DevOps
+        - KI
         - Prozesse
         - CI/CD
         - Blogging
         - Software Qualität
         - Legacy
+        - Security
   - mkdocs-simple-hooks:
       hooks:
         on_page_markdown: "hooks:insert_zotero_references"

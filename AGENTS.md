@@ -39,3 +39,4 @@
 - Citation keys use Pandoc-style `[@Key]` and are replaced with numbered links plus a bibliography.
 - Mermaid fences are configured in `mkdocs.yml`; PlantUML diagrams render through `http://www.plantuml.com/plantuml`, so local builds need network access for those diagrams.
 - Editorial draft rules live under `content/blog/posts/rooles/`: German, clear/professional tone, usually 1,500-3,000 words, max about 5,000.
+- Deutsche Texte in Markdown-Dateien dürfen niemals transliteriert werden; Umlaute und ß sind beizubehalten.
