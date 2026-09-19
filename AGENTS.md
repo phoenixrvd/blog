@@ -10,7 +10,7 @@
 ## Required local setup
 - Python deps: `python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`.
 - `pandoc` must be installed on the system; citation rendering shells out to `pandoc --citeproc` and exits the build on citation errors.
-- Citation files must be at `content/references.bib` and `content/ieee.csl`; the README's old `content/blog/ieee.csl` path is stale.
+- Citation files must be at `content/references.bib` and `content/ieee.csl`.
 
 ## Canonical commands
 - Local preview: `source .venv/bin/activate && mkdocs serve --livereload`

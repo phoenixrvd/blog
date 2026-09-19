@@ -8,19 +8,33 @@ zu einer statischen Website gerendert. Die Blog-Funktionalität wird von
 
 ## Installation
 
-Alle Projektabhängigkeiten in einer Python-Virtual-Environment installieren:
+Python und Pandoc installieren (Debian/Ubuntu). Pandoc wird für die Verarbeitung
+der Quellenangaben mit `--citeproc` benötigt:
 
 ```bash
-sudo apt install python3-venv
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+sudo apt update
+sudo apt install python3 python3-venv pandoc
 ```
 
-Den Zitierstil importieren, um Quellen über [Zotero](https://www.zotero.org/) zu verwalten:
+Anschließend im Projektverzeichnis eine virtuelle Python-Umgebung erstellen und
+die Projektabhängigkeiten installieren:
 
 ```bash
-wget https://www.zotero.org/styles/ieee -O content/blog/ieee.csl
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Die direkten Python-Abhängigkeiten sind in `requirements.txt` auf konkrete Versionen
+festgelegt; indirekte Abhängigkeiten löst pip auf. Der technische Stand wurde mit
+Python 3.14.4 geprüft.
+
+Quellen werden über [Zotero](https://www.zotero.org/) verwaltet. Die Bibliografie liegt
+unter `content/references.bib`, der Zitierstil unter `content/ieee.csl`. Beide Dateien
+sind bereits im Repository enthalten. Um den IEEE-Zitierstil bei Bedarf zu aktualisieren:
+
+```bash
+wget https://www.zotero.org/styles/ieee -O content/ieee.csl
 ```
 
 ## Lokale Vorschau
@@ -33,12 +47,29 @@ mkdocs serve --livereload
 ```
 
 Alternativ kann die Website lokal gebaut werden, um den statischen Output zu prüfen.
-Die generierten Dateien landen in `dist` und werden nicht committet:
+Der strikte Build entspricht der Prüfung in GitHub Actions. Die generierten Dateien
+landen in `dist/`, werden beim Build standardmäßig bereinigt und nicht committet:
 
 ```bash
 source .venv/bin/activate
-rm -rf dist/*
-mkdocs build
+mkdocs build --strict
+```
+
+## Python-Abhängigkeiten aktualisieren
+
+In der aktivierten virtuellen Umgebung nach neueren Versionen suchen:
+
+```bash
+python -m pip list --outdated
+```
+
+Die gewünschten Versionsangaben in `requirements.txt` anpassen, anschließend
+installieren und prüfen:
+
+```bash
+python -m pip install --upgrade -r requirements.txt
+python -m pip check
+mkdocs build --strict
 ```
 
 ## License
